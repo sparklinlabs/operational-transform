@@ -1,0 +1,27 @@
+{
+  "name": "operational-transform",
+  "version": "0.0.0",
+  "description": "Operational transform library",
+  "author": "Nicolas Gauthier <nicolas.gauthier84@gmail.com>",
+  "main": "./OperationalTranform.coffee",
+  "repository": {
+    "type": "hg",
+    "url": "https://bitbucket.org/sparklinlabs/operational-transform"
+  },
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register"
+  },
+  "devDependencies": {
+    "browserify": "^6.2.0",
+    "coffeeify": "^0.7.0",
+    "gulp": "^3.8.7",
+    "vinyl-source-stream": "^1.0.0",
+    "coffee-script": "^1.8.0",
+    "cassert": "^0.1.2"
+  },
+  "browserify": {
+    "transform": [
+      "coffeeify"
+    ]
+  }
+}
