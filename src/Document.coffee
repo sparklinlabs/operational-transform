@@ -4,14 +4,13 @@ module.exports = class Document
   constructor: ->
     @text = ""
     
-    @revision = 0
     @operations = []
     
   apply: (newOperation, revision) ->
     # Should't happened
-    throw new Error "The operation base revision is greater than the document revision" if revision > @revision
+    throw new Error "The operation base revision is greater than the document revision" if revision > @operations.length
       
-    if revision < @revision
+    if revision < @operations.length
       # Conflict !
       missedOperations = new OT.TextOperation
       missedOperations.targetLength = @operations[revision].baseLength
@@ -20,14 +19,11 @@ module.exports = class Document
         missedOperations = missedOperations.compose @operations[index]
       
       [missedOperationsPrime, newOperationPrime] = missedOperations.transform newOperation
-      operationToPush = newOperationPrime
-    else  
-      operationToPush = newOperation.clone()
+      newOperation = newOperationPrime
       
-    @text = operationToPush.apply @text
+    @text = newOperation.apply @text
+    @operations.push newOperation.clone()
     
-    @revision++
-    @operations.push operationToPush
     return
     
   
