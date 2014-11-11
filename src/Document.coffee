@@ -3,7 +3,6 @@ OT = require './'
 module.exports = class Document
   constructor: ->
     @text = ""
-    
     @operations = []
     
   apply: (newOperation, revision) ->
@@ -20,10 +19,10 @@ module.exports = class Document
       
       [missedOperationsPrime, newOperationPrime] = missedOperations.transform newOperation
       newOperation = newOperationPrime
-      
+    
     @text = newOperation.apply @text
     @operations.push newOperation.clone()
     
-    return
+    return newOperation
     
   

@@ -10,6 +10,29 @@ module.exports = class TextOperation
     # the operation on a valid input string.
     @targetLength = 0
     
+  serialize: ->
+    data = []
+    for op in @ops
+      data.push { type: op.type, attributes: op.attributes }
+      
+    data
+    
+  deserialize: (data) ->
+    return false if ! data?
+    
+    for op in data
+      switch op.type
+        when 'retain'
+          @retain op.attributes.amount
+        when 'insert'
+          @insert op.attributes.text
+        when 'delete'
+          @delete op.attributes.text
+        else
+          return false
+      
+    true
+    
   retain: (amount) ->
     return if typeof(amount) != 'number' or amount <= 0
     @baseLength += amount
