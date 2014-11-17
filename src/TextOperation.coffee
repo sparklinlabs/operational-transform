@@ -330,19 +330,19 @@ module.exports = class TextOperation
       # next two cases: delete/retain and retain/delete
       else if op1.type == 'delete' and op2.type == 'retain'
         if op1.attributes.text.length == op2.attributes.amount
-          minl = op2.attributes.amount
+          text = op1.attributes.text
           op1 = ops1[i1++]
           op2 = ops2[i2++]
         else if op1.attributes.text.length > op2.attributes.amount
-          minl = op2.attributes.amount
+          text = op1.attributes.text.slice 0, op2.attributes.amount
           op1.attributes.text = op1.attributes.text.slice op2.attributes.amount
           op2 = ops2[i2++]
         else
-          minl = op1.attributes.text.length
+          text = op1.attributes.text
           op2.attributes.amount -= op1.attributes.text.length
           op1 = ops1[i1++]
           
-        operation1prime.delete minl
+        operation1prime.delete text
         
       else if op1.type == 'retain' and op2.type == 'delete'
         if op1.attributes.amount == op2.attributes.text.length
