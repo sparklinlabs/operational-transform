@@ -11,14 +11,13 @@ module.exports = class Document
       
     if revision < @operations.length
       # Conflict !
-      missedOperations = new OT.TextOperation
+      missedOperations = new OT.TextOperation @operations[revision].userId
       missedOperations.targetLength = @operations[revision].baseLength
       
       for index in [revision ... @operations.length]
         missedOperations = missedOperations.compose @operations[index]
       
-      [missedOperationsPrime, newOperationPrime] = missedOperations.transform newOperation
-      newOperation = newOperationPrime
+      [missedOperationsPrime, newOperation] = missedOperations.transform newOperation
     
     @text = newOperation.apply @text
     @operations.push newOperation.clone()

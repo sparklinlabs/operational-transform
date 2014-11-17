@@ -1,7 +1,7 @@
 OT = require './'
 
 module.exports = class TextOperation
-  constructor: ->
+  constructor: (@userId) ->
     @ops = []
     # An operation's baseLength is the length of every string the operation
     # can be applied to.
@@ -11,16 +11,17 @@ module.exports = class TextOperation
     @targetLength = 0
     
   serialize: ->
-    data = []
+    ops = []
     for op in @ops
-      data.push { type: op.type, attributes: op.attributes }
+      ops.push { type: op.type, attributes: op.attributes }
       
-    data
+    { ops, userId: @userId }
     
   deserialize: (data) ->
     return false if ! data?
     
-    for op in data
+    @userId = data.userId
+    for op in data.ops
       switch op.type
         when 'retain'
           @retain op.attributes.amount
@@ -86,7 +87,7 @@ module.exports = class TextOperation
     return text
     
   invert: ->
-    invertedOperation = new TextOperation
+    invertedOperation = new TextOperation @userId
     for op in @ops
       switch op.type
         when 'retain'
@@ -101,7 +102,7 @@ module.exports = class TextOperation
     return invertedOperation
     
   clone: ->
-    operation = new TextOperation
+    operation = new TextOperation @userId
     for op in @ops
       switch op.type
         when 'retain'
@@ -138,7 +139,7 @@ module.exports = class TextOperation
   compose: (operation2) ->
     throw new Error 'The base length of the second operation has to be the target length of the first operation' if @targetLength != operation2.baseLength
       
-    composedOperation = new TextOperation() # the combined operation
+    composedOperation = new TextOperation @userId # the combined operation
     
     ops1 = @clone().ops
     ops2 = operation2.clone().ops
@@ -260,10 +261,23 @@ module.exports = class TextOperation
   This function is the heart of OT. 
   ###
   transform: (operation2) ->
-    operation1prime = new TextOperation
-    operation2prime = new TextOperation
-    ops1 = @clone().ops
-    ops2 = operation2.clone().ops
+    # Give priority with the user id
+    id1 = @userId.split '/'
+    id2 = operation2.userId.split '/'
+    
+    if id1[0] < id2[0] or ( id1[0] == id2[0] and id1[1] <= id2[1] )
+      operation1prime = new TextOperation @userId
+      operation2prime = new TextOperation operation2.userId
+      
+      ops1 = @clone().ops
+      ops2 = operation2.clone().ops
+    else
+      operation1prime = new TextOperation operation2.userId
+      operation2prime = new TextOperation @userId
+      
+      ops1 = operation2.clone().ops
+      ops2 = @clone().ops
+      
     i1 = 0
     i2 = 0
     op1 = ops1[i1++]
@@ -361,5 +375,8 @@ module.exports = class TextOperation
         operation2prime.delete text
       else
         throw new Error("The two operations aren't compatible")
-
-    return [operation1prime, operation2prime];
+    
+    if id1[0] < id2[0] or ( id1[0] == id2[0] and id1[1] <= id2[1] )
+      return [operation1prime, operation2prime]
+    else
+      return [operation2prime, operation1prime]

@@ -4,7 +4,7 @@ OT = require '../src'
 
 describe 'insert', ->
   it 'should apply 1 operation', (done) ->
-    ope0 = new OT.TextOperation
+    ope0 = new OT.TextOperation "0/0"
     ope0.insert 'hello'
     
     document = new OT.Document
@@ -14,10 +14,10 @@ describe 'insert', ->
     done()
   
   it 'should add 2 operations', (done) ->
-    ope0 = new OT.TextOperation
+    ope0 = new OT.TextOperation "0/0"
     ope0.insert 'hello world'
 
-    ope1 = new OT.TextOperation
+    ope1 = new OT.TextOperation "0/0"
     ope1.retain 5
     ope1.insert ' lovely'
     ope1.retain 6
@@ -31,10 +31,10 @@ describe 'insert', ->
 
 describe 'delete', ->
   it 'should add 2 operations : 1 insert and 1 delete', (done) ->
-    ope0 = new OT.TextOperation
+    ope0 = new OT.TextOperation "0/0"
     ope0.insert 'hello lovely world'
 
-    ope1 = new OT.TextOperation
+    ope1 = new OT.TextOperation "0/0"
     ope1.retain 5
     ope1.delete ' lovely'
     ope1.retain 6
@@ -47,16 +47,16 @@ describe 'delete', ->
     done()
     
   it 'should handle several insert/delete operations', (done) ->
-    ope0 = new OT.TextOperation
+    ope0 = new OT.TextOperation "0/0"
     ope0.insert 'hello lovely world. today is pretty nice!'
 
-    ope1 = new OT.TextOperation
+    ope1 = new OT.TextOperation "0/0"
     ope1.retain 6
     ope1.delete 'lovely'
     ope1.insert 'sweet'
     ope1.retain 29
     
-    ope2 = new OT.TextOperation
+    ope2 = new OT.TextOperation "0/0"
     ope2.retain 28
     ope2.insert 'cool'
     ope2.delete 'pretty nice'
@@ -73,16 +73,16 @@ describe 'delete', ->
     
 describe 'compose', ->
   it 'should compose two operations', (done) ->
-    ope0 = new OT.TextOperation
+    ope0 = new OT.TextOperation "0/0"
     ope0.insert 'hello lovely world. today is pretty nice!'
 
-    ope1 = new OT.TextOperation
+    ope1 = new OT.TextOperation "0/0"
     ope1.retain 6
     ope1.delete 'lovely'
     ope1.insert 'sweet'
     ope1.retain 29
     
-    ope2 = new OT.TextOperation
+    ope2 = new OT.TextOperation "0/0"
     ope2.retain 28
     ope2.insert 'cool'
     ope2.delete 'pretty nice'
@@ -97,15 +97,15 @@ describe 'compose', ->
   
 describe 'transform', ->
   it 'should transform two operations in conflict', (done) ->
-    ope0 = new OT.TextOperation
+    ope0 = new OT.TextOperation "0/0"
     ope0.insert 'Hello world!'
 
-    ope1 = new OT.TextOperation
+    ope1 = new OT.TextOperation "0/0"
     ope1.retain 5
     ope1.insert ' lovely'
     ope1.retain 7
 
-    ope2 = new OT.TextOperation
+    ope2 = new OT.TextOperation "1/0"
     ope2.retain 6
     ope2.delete 'world'
     ope2.insert 'people'
@@ -126,27 +126,27 @@ describe 'transform', ->
     assert document1.text == document2.text
     done()
     
-  it 'should automatically transform the last operation in conflict with previous ones', (done) ->
-    ope0 = new OT.TextOperation
+  it 'should automatically transform the last operation in conflict with previous ones and give correct priority', (done) ->
+    ope0 = new OT.TextOperation "0/1"
     ope0.insert 'Hello world!'
 
-    ope1 = new OT.TextOperation
+    ope1 = new OT.TextOperation "0/1"
     ope1.retain 5
     ope1.insert ' lovely'
     ope1.retain 7
     
-    ope1bis = new OT.TextOperation
+    ope1bis = new OT.TextOperation "0/0"
     ope1bis.retain 5
     ope1bis.insert ' sweet'
     ope1bis.retain 7
 
-    ope2 = new OT.TextOperation
+    ope2 = new OT.TextOperation "0/1"
     ope2.retain 13
     ope2.delete 'world'
     ope2.insert 'people'
     ope2.retain 1
     
-    ope3 = new OT.TextOperation
+    ope3 = new OT.TextOperation "0/1"
     ope3.retain 20
     ope3.insert ' Today will be a nice day!'
     
@@ -157,5 +157,6 @@ describe 'transform', ->
     document.apply ope3, 3
     document.apply ope1bis, 1
     
-    assert document.text == 'Hello lovely sweet people! Today will be a nice day!'
+    assert document.text == 'Hello sweet lovely people! Today will be a nice day!'
     done()
+    
