@@ -262,10 +262,7 @@ module.exports = class TextOperation
   ###
   transform: (operation2) ->
     # Give priority with the user id
-    id1 = @userId.split '/'
-    id2 = operation2.userId.split '/'
-    
-    if id1[0] < id2[0] or ( id1[0] == id2[0] and id1[1] <= id2[1] )
+    if @gotPriority operation2.userId
       operation1prime = new TextOperation @userId
       operation2prime = new TextOperation operation2.userId
       
@@ -376,7 +373,19 @@ module.exports = class TextOperation
       else
         throw new Error("The two operations aren't compatible")
     
-    if id1[0] < id2[0] or ( id1[0] == id2[0] and id1[1] <= id2[1] )
+    if @gotPriority operation2.userId
       return [operation1prime, operation2prime]
     else
       return [operation2prime, operation1prime]
+      
+  gotPriority: (id2) ->
+    if typeof(@userId) == 'integer'
+      if @userId < id2 then return true
+      else return false
+      
+    else
+      id1 = @userId.split '/'
+      id2 = id2.split '/'
+      
+      if id1[0] < id2[0] or ( id1[0] == id2[0] and id1[1] <= id2[1] ) then return true
+      else return false
