@@ -379,7 +379,7 @@ module.exports = class TextOperation
       return [operation2prime, operation1prime]
       
   gotPriority: (id2) ->
-    if typeof(@userId) == 'integer'
+    if typeof(@userId) == 'number'
       if @userId < id2 then return true
       else return false
       
