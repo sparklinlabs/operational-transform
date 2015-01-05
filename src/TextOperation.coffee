@@ -366,7 +366,7 @@ module.exports = class TextOperation
           op2 = ops2[i2++]
         else
           text = op2.attributes.text.slice 0, op1.attributes.amount
-          op2.attributes.text = op1.attributes.text.slice op1.attributes.text.length
+          op2.attributes.text = op2.attributes.text.slice op1.attributes.amount
           op1 = ops1[i1++]
           
         operation2prime.delete text
