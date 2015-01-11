@@ -10,10 +10,10 @@ gulp.task 'build', ->
     .pipe source 'OperationalTransform.js'
     .pipe gulp.dest './lib'
 
-# Watch
+
 tasks = [ 'build' ]
 
-gulp.task 'watch', tasks, ->
-  gulp.watch [ 'src/**/*.coffee' ], ['build']
+gulp.task 'default', tasks, ->
+  gulp.watch [ 'src/**/*.coffee' ], [ 'build' ]
 
-gulp.task 'default', tasks
+gulp.task 'nowatch', tasks
