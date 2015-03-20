@@ -380,13 +380,5 @@ module.exports = class TextOperation
       return [operation2prime, operation1prime]
 
   gotPriority: (id2) ->
-    if typeof(@userId) == 'number'
-      if @userId < id2 then return true
-      else return false
-
-    else
-      id1 = @userId.split '/'
-      id2 = id2.split '/'
-
-      if id1[0] < id2[0] or ( id1[0] == id2[0] and id1[1] <= id2[1] ) then return true
-      else return false
+    if @userId <= id2 then return true
+    else return false
