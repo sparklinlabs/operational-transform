@@ -139,7 +139,8 @@ module.exports = class TextOperation
   compose: (operation2) ->
     throw new Error 'The base length of the second operation has to be the target length of the first operation' if @targetLength != operation2.baseLength
 
-    composedOperation = new TextOperation @userId # the combined operation
+    # the combined operation
+    composedOperation = new TextOperation @userId
 
     ops1 = @clone().ops
     ops2 = operation2.clone().ops
