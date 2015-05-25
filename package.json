@@ -1,9 +1,9 @@
 {
   "name": "operational-transform",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Operational transform library",
   "author": "Nicolas Gauthier <nicolas.gauthier84@gmail.com>",
-  "main": "./lib/OperationalTransform.js",
+  "main": "./lib/index.js",
   "repository": {
     "type": "hg",
     "url": "https://bitbucket.org/sparklinlabs/operational-transform"
@@ -12,11 +12,9 @@
     "test": "./node_modules/.bin/mocha"
   },
   "devDependencies": {
-    "browserify": "^10.1.3",
     "cassert": "^0.1.2",
     "gulp": "^3.8.11",
     "gulp-typescript": "^2.7.5",
-    "typescript": "^1.5.0-alpha",
-    "vinyl-source-stream": "^1.1.0"
+    "typescript": "^1.5.0-alpha"
   }
 }
