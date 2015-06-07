@@ -4,12 +4,12 @@ A library for concurrent text editing based on [Operational Transformation](http
 
 ## Installing
 
-  npm install operational-transform
+    npm install operational-transform
 
 ## Usage and testing
 
 To run the tests:
 
-  npm run test
+    npm run test
 
 See [test.js](https://bitbucket.org/sparklinlabs/operational-transform/src/tip/test/test.js) for some examples.
