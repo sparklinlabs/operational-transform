@@ -1,6 +1,6 @@
 var assert = require("cassert");
 
-var OT = require("../src");
+var OT = require("../lib");
 
 describe("insert", function() {
   it("should apply 1 operation", function(done) {
