@@ -33,7 +33,7 @@ class Document {
     return newOperation;
   }
 
-  getRevisionId() { return this.operations.length - this._refRevisionId; }
+  getRevisionId() { return this.operations.length + this._refRevisionId; }
 }
 
 export = Document;
