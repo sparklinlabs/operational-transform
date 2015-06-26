@@ -1,10 +1,18 @@
 import * as OT from "./index";
 
 class Document {
-  text = "";
+  text: string;
   operations: OT.TextOperation[] = [];
+  _refRevisionId: number;
+
+  constructor(text = "", revisionId = 0) {
+    this.text = text;
+    this._refRevisionId = revisionId;
+  }
 
   apply(newOperation: OT.TextOperation, revision: number) {
+    revision -=  this._refRevisionId;
+
     // Should't happen
     if (revision > this.operations.length) throw new Error("The operation base revision is greater than the document revision");
 
@@ -24,6 +32,8 @@ class Document {
 
     return newOperation;
   }
+
+  getRevisionId() { return this.operations.length - this._refRevisionId; }
 }
 
 export = Document;
