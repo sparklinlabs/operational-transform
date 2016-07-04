@@ -12,4 +12,4 @@ To run the tests:
 
     npm run test
 
-See [test.js](https://bitbucket.org/sparklinlabs/operational-transform/src/tip/test/test.js) for some examples.
+See [test.js](https://github.com/sparklinlabs/operational-transform/blob/master/test/test.js) for some examples.
